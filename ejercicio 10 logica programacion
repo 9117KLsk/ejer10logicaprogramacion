@@ -1,0 +1,138 @@
+class Pelicula {
+    constructor({id,titulo,estreno,pais,generos,calificacion,director}){
+    this.id=id;
+    this.titulo=titulo;
+    this.estreno=estreno;
+    this.pais=pais;
+    this.generos=generos;
+    this.calificacion=calificacion;
+    this.director=director;
+  
+    this.validarIMDB(id);
+    this.validarTitulo(titulo);
+    this.validarDirector(director);
+    this.validarEstreno(estreno);
+    this.validarPais(pais);
+    this.validarGenero(generos);
+    this.validarCalificacion(calificacion);
+  }
+	static get listaGeneros() {
+  return ['Action', 'Adult', 'Adventure', 'Animation', 'Biography', 'Comedy','Crime', 'Documentary', 'Drama','Family','Fantasy', 'Film Noir', 'Game-Show','History', 'Horror','Musical','Music', 'Mystery', 'News', 'Reality-TV','Romance','Sci-Fi','Short','Sport','Talk-Show','Thriller', 'War', 'Western'];
+}
+
+static generosAceptados() {
+  return console.info(`Los géneros aceptados son: ${Pelicula.listaGeneros.join(", ")}`);
+}
+ validarLongitudCadena(propiedad, valor, longitud) {
+   if(valor.length>longitud) return console.error(` ${propiedad} "${valor}" excede el numero de caracteres permitidos: (${longitud})`);
+ }
+
+ validarCadena(propiedad, valor) {
+   if(!valor) return console.warn(`${propiedad} "${valor}" está vacío`);
+   if(typeof valor!=="string") return console.error(`${propiedad} "${valor}" ingresado, NO es una cadena de texto`);
+  return true;
+ }
+ validarArreglo(propiedad, valor) {
+   if(!valor) return console.warn(`${propiedad} "${valor}" está vacío`);
+
+   if(!(valor instanceof Array)) return console.error(`${propiedad} "${valor}" ingresado NO es un arreglo`);
+
+   if(valor.length === 0) return console.error(`${propiedad} "${valor}" no tiene datos`);
+
+   for(let cadena of valor) {
+     if(typeof cadena!=="string") return console.error(`El valor "${cadena}" ingresado, NO es un número`);
+   
+    } 
+  return true;
+ }
+ 
+ validarNumero(propiedad,valor) {
+   if(!valor) return console.warn(`${propiedad}  "${valor}" está vacío`);
+
+   if(typeof valor !== "number") return console.error(`${propiedad}  "${valor}" NO es un número`);
+
+   return true;
+ }
+ validarIMDB(id) {
+     if(this.validarCadena(" IMDB id",id)){
+       if(!(/^([a-z]){2}([0-9]){7}$/.test(id))) return console.error(`IMDB id "${id}" no es válido, debe tener 9 caracteres, los 2 primeros letras minúsculas. los 7 restantes números`);
+     } 
+  }
+
+ validarTitulo(titulo) {
+   if(this.validarCadena(" título", titulo)){
+   this.validarLongitudCadena(" Título", titulo, 100);
+ }
+ }
+ validarDirector(director) {
+  if(this.validarCadena(" Director", director)){
+  this.validarLongitudCadena(" Director", director, 50);
+}
+}
+validarEstreno(estreno) {
+  if(this.validarNumero(" Año de estreno", estreno)){
+    if(!(/^([0-9]){4}$/.test(estreno))) return console.error(`Año de estreno "${estreno}" no es válido, debe tener 4 dígitos`);
+} 
+}
+validarPais(pais) {
+  this.validarArreglo("País", pais);
+}
+validarGenero(generos)  {
+  if(this.validarArreglo("Géneros", generos)) {
+    for(let genero of generos) {
+      // console.log(genero, Pelicula.listaGeneros.include(generos));
+      if(!Pelicula.listaGeneros.include(generos)) {
+        console.error(`Género(s) incorrecto(s) "${generos.join(", ")}"`);
+        Pelicula.generosAceptados();
+      }
+    }
+  }
+}
+validarCalificacion(calificacion)  {
+   if(this.validarNumero("Calificacion",calificacion)) return (calificacion<0||calificacion>10)   ? console.error('La calificación debe estar en un rango entre 0 y 10') :this.calificacion = this.calificacion.toFixed(1);
+}
+fichaTecnica() {
+  console.info(`Ficha Técnica\nTítulo: "${this.titulo}"\nDirector: "${this.director}"\nAño: "${this.estreno}"\nPaís: "${this.pais.join("- ")}"\nGéneros: "${this.generos.join(", ")}"\nCalificación: "${this.calificacion}"\nIMDB id: "${this.id}"`);
+}
+}
+
+//  Pelicula.generosAceptados();
+const peli = new Pelicula({
+id:'tt1160419',
+titulo:'Dune',
+director:'Denis Villenueve',
+estreno:2021,
+pais: ['Estados Unidos'],
+generos:['Action', 'Adventure', 'Drama'],
+calificacion: 8.1
+})
+
+peli.fichaTecnica();
+
+/*[{id:'tt1160419',
+titulo:'Dune',
+director:'Denis Villenueve',
+estreno:2021,
+pais: ['Estados Unidos'],
+generos:['Action', 'Adventure', 'Drama'],
+calificacion: 8.1
+},
+{id:'tt4513678',
+titulo:'Ghostbusters:Afterlife',
+director:'Jason Reitman',
+estreno:2021,
+pais: ['Estados Unidos'],
+generos:['Adventury', 'Comedy', 'Fantasy'],
+calificacion: 7.5
+},
+{id:'tt0113277',
+titulo:'Heat',
+director:'Michael Mann',
+estreno:1995,
+pais: ['Estados Unidos'],
+generos:['Action', 'Crime', 'Drama'],
+calificacion: 8.1
+}
+];
+misPelis.forEach(el=>new Pelicula(el).fichaTecnica());*/
+
